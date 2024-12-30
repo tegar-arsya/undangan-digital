@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  weddings  Wedding[]
+}
+
+model Wedding {
+  id         String   @id @default(uuid())
+  userId     String
+  brideName  String
+  groomName  String
+  date       String
+  time       String
+  location   String
+  slug       String   @unique
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  guests     Guest[]
+  rsvps      RSVP[]
+  photos     WeddingPhoto[]
+  background Background[]
+}
+
+model Guest {
+  id        String   @id @default(uuid())
+  weddingId String
+  name      String
+  email     String?
+  slug      String
+  createdAt DateTime @default(now())
+  wedding   Wedding  @relation(fields: [weddingId], references: [id])
+  rsvp      RSVP?
+
+  @@unique([weddingId, slug])
+}
+
+model RSVP {
+  id        String   @id @default(uuid())
+  weddingId String
+  guestId   String   @unique
+  attendance Boolean
+  createdAt DateTime @default(now())
+  wedding   Wedding  @relation(fields: [weddingId], references: [id])
+  guest     Guest    @relation(fields: [guestId], references: [id])
+}
+
+model WeddingPhoto {
+  id        String   @id @default(uuid())
+  weddingId String
+  photoUrl  String
+  createdAt DateTime @default(now())
+  wedding   Wedding  @relation(fields: [weddingId], references: [id])
+}
+
+model Background {
+  id        String   @id @default(uuid())
+  weddingId String
+  name      String
+  gambar String
+  createdAt DateTime @default(now())
+  wedding   Wedding  @relation(fields: [weddingId], references: [id])
+
+  @@unique([weddingId])
+}
