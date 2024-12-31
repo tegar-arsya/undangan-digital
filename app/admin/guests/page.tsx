@@ -9,7 +9,10 @@ async function getGuests() {
     const guests = await prisma.guest.findMany({
       orderBy: { createdAt: 'desc' },
     });
-    return guests;
+    return guests.map((guest) => ({
+      ...guest,
+      email: guest.email ?? '', // provide a default value for email if it's null
+    }));
   } catch (error) {
     console.error('Error fetching weddings:', error);
     return [];

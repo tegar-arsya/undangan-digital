@@ -70,7 +70,7 @@ export function GuestsTable({ guests: initialGuests }: GuestsTableProps) {
                 </TableCell>
                 <TableCell>
                 <div className="flex space-x-2">
-                    <Link href={`/admin/weddings/${guests.id}/edit`}>
+                    <Link href={`/admin/guests/${guests.id}/edit`}>
                       <Button variant="outline" size="sm" className="hover:bg-gray-100 hover:text-gray-900">
                         <Edit2 className="h-4 w-4 mr-2" />
                         Edit
