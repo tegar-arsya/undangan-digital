@@ -28,3 +28,10 @@ export interface Wedding {
     email: string
     slug: string
   }
+
+  export interface WeddingPhoto {
+    id: string;
+    weddingId: string;
+    name: string;
+    photoUrl: string;
+  }

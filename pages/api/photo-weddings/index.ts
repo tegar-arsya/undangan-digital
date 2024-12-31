@@ -1,4 +1,3 @@
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import formidable, { File } from 'formidable';
 import fs from 'fs';
@@ -11,7 +10,7 @@ export const config = {
   },
 };
 
-const uploadDir = './public/uploads/background';
+const uploadDir = './public/uploads/photo-weddings';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const token = req.cookies.token;
@@ -50,10 +49,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           ? fields.weddingId[0]
           : fields.weddingId;
 
-        const names = Array.isArray(fields.name) ? fields.name : [fields.name];
-        const gambars = Array.isArray(files.gambar) ? files.gambar : [files.gambar];
+        const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
+        const photoUrls = Array.isArray(files.photoUrl) ? files.photoUrl : [files.photoUrl];
 
-        if (!weddingId || names.length === 0 || gambars.length === 0) {
+        if (!weddingId || !name || photoUrls.length === 0) {
           return res.status(400).json({ message: 'Invalid input' });
         }
 
@@ -69,47 +68,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(403).json({ message: 'Not authorized to add background to this wedding' });
           }
 
-          const newBackgrounds = await Promise.all(
-            names.map(async (name, index) => {
-              const gambar = gambars[index] as File;
-              const relativePath = gambar?.filepath?.split('public')?.[1]?.replace(/\\/g, '/').replace(/^\/+/, '');
+          const newPhotoWeddings = await Promise.all(
+            photoUrls.map(async (photoFile: File) => {
+              const relativePath = photoFile?.filepath?.split('public')?.[1]?.replace(/\\/g, '/').replace(/^\/+/, '');
               const urlPath = `/${relativePath}`;
 
-              return prisma.background.create({
+              return prisma.weddingPhoto.create({
                 data: {
                   weddingId,
-                  name,
-                  gambar: urlPath,
+                  name: name ?? '', 
+                  photoUrl: urlPath,
                 },
               });
             })
           );
 
-          res.status(201).json(newBackgrounds);
+          res.status(201).json(newPhotoWeddings);
         } catch (error) {
           console.error('Prisma Error:', error);
           res.status(500).json({ message: 'Internal server error' });
         }
       });
     } else if (req.method === 'GET') {
-      const backgrounds = await prisma.background.findMany({
-        where: {
-          wedding: {
-            userId,
-          },
-        },
-        include: {
-          wedding: {
-            select: {
-              brideName: true,
-              groomName: true,
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-      });
+      const { weddingId } = req.query;
+      if (!weddingId || typeof weddingId !== 'string') {
+        return res.status(400).json({ message: 'Invalid weddingId' });
+      }
+      const photoUrls = await prisma.weddingPhoto.findMany({
+        where: { weddingId }, // Filter berdasarkan weddingId
+      select: {
+        id: true,
+        photoUrl: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
 
-      res.status(200).json(backgrounds);
+      res.status(200).json(photoUrls);
     } else {
       res.status(405).json({ message: 'Method not allowed' });
     }
@@ -118,4 +112,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(401).json({ message: 'Unauthorized' });
   }
 }
-
