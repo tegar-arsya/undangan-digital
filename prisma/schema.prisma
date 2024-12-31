@@ -56,7 +56,9 @@ model RSVP {
   id        String   @id @default(uuid())
   weddingId String
   guestId   String   @unique
-  attendance Boolean
+  name String
+  attendance String
+  komentar String
   createdAt DateTime @default(now())
   wedding   Wedding  @relation(fields: [weddingId], references: [id])
   guest     Guest    @relation(fields: [guestId], references: [id])
