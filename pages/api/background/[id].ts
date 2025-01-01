@@ -4,6 +4,13 @@ import fs from 'fs';
 import prisma from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
 
+
+interface UpdateData {
+  name: string;
+  gambar?: string;
+}
+
+
 export const config = {
   api: {
     bodyParser: false,
@@ -58,8 +65,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(500).json({ message: 'Error parsing file upload' });
         }
 
-        const name = fields.name as string;
-        const gambar = files.gambar as formidable.File;
+        const name = fields.name?.[0] ?? '';
+        const gambar = Array.isArray(files.gambar) ? files.gambar[0] : files.gambar;
 
         try {
           const background = await prisma.background.findUnique({
@@ -71,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(403).json({ message: 'Not authorized to edit this background' });
           }
 
-          let updateData: any = { name };
+          const updateData: UpdateData = gambar ? { name, gambar: `/${gambar.filepath.split('public')[1].replace(/\\/g, '/').replace(/^\/+/, '')}` } : { name };
 
           if (gambar) {
             const relativePath = gambar.filepath.split('public')[1].replace(/\\/g, '/').replace(/^\/+/, '');
