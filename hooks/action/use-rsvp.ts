@@ -38,7 +38,6 @@ export function useRSVP() {
         customClass: {
           popup: 'rounded-lg shadow-xl border border-gray-100',
           title: 'text-2xl font-semibold text-gray-800',
-          content: 'text-gray-600',
           confirmButton: 'px-6 py-2 rounded-lg text-white font-medium'
         }
       });
@@ -54,7 +53,6 @@ export function useRSVP() {
         customClass: {
           popup: 'rounded-lg shadow-xl border border-gray-100',
           title: 'text-2xl font-semibold text-gray-800',
-          content: 'text-gray-600',
           confirmButton: 'px-6 py-2 rounded-lg text-white font-medium'
         }
       });
