@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { ImageIcon } from 'lucide-react'
 import Swal from 'sweetalert2'
 import { Wedding } from '@/types/wedding'
-import { WeddingPhoto } from '@/types/wedding'
+import { WeddingPhoto } from '@/types/weddingphoto'
 
 export default function EditPhotoWeddings({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(false)
