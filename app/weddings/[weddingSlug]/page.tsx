@@ -1,12 +1,11 @@
 import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import InvitationDetails from '@/components/InvitationDetails'
-import RSVPForm from '@/components/RSVPForm'
 import PhotoGallery from '@/components/PhotoGallery'
 import CountdownTimer from '@/components/CountdownTimer'
 import { RSVPSummaryTable } from '@/components/rsvp/RSVPSummaryTable'
 import { Wedding } from '@/types/wedding'
-
+import { RSVP } from '@/types/rsvp'
 export default async function WeddingPage({ params }: { params: { weddingSlug: string } }) {
   const weddingData = await prisma.wedding.findUnique({
     where: { slug: params.weddingSlug },
@@ -24,7 +23,7 @@ export default async function WeddingPage({ params }: { params: { weddingSlug: s
         }
       }
     },
-  }) as (Wedding & { rsvps: any[] }) | null
+  }) as (Wedding & { rsvps: RSVP[] }) | null
 
   if (!weddingData) {
     notFound()

@@ -12,14 +12,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquare, Users } from 'lucide-react';
+import { RSVP } from '@/types/rsvp'
 
-interface RSVP {
-  id: string;
-  name: string;
-  attendance: string;
-  komentar: string;
-  createdAt: Date;
-}
 
 interface RSVPSummaryTableProps {
   rsvps: RSVP[];
