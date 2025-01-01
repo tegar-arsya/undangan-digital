@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TimeLeft } from '@/types/wedding';
+import { TimeLeft } from '@/types/timeleft';
 
 export default function CountdownTimer({ weddingDate }: { weddingDate: string }) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
