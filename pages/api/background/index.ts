@@ -78,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               return prisma.background.create({
                 data: {
                   weddingId,
-                  name,
+                  name : name ?? '',
                   gambar: urlPath,
                 },
               });
