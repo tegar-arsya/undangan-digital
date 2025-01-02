@@ -68,7 +68,7 @@ model WeddingPhoto {
   id        String   @id @default(uuid())
   weddingId String
   name      String
-  photoUrl  String
+  gambar  String
   createdAt DateTime @default(now())
   wedding   Wedding  @relation(fields: [weddingId], references: [id])
 }

@@ -5,6 +5,10 @@ import fs from 'fs';
 import prisma from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
 
+interface UpdateData {
+  name: string;
+  gambar?: string;
+}
 export const config = {
   api: {
     bodyParser: false,
@@ -59,8 +63,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(500).json({ message: 'Error parsing file upload' });
         }
 
-        const name = fields.name as string;
-        const photoUrl = files.photoUrl as formidable.File;
+        const name = fields.name?.[0] ?? '';
+        const gambar = Array.isArray(files.gambar) ? files.gambar[0] : files.gambar;
 
         try {
           const Weddingphoto = await prisma.weddingPhoto.findUnique({
@@ -71,17 +75,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           if (!Weddingphoto || Weddingphoto.wedding.userId !== userId) {
             return res.status(403).json({ message: 'Not authorized to edit this background' });
           }
-
-          const updateData: any = { name };
-
-          if (photoUrl) {
-            const relativePath = photoUrl.filepath.split('public')[1].replace(/\\/g, '/').replace(/^\/+/, '');
+          
+          const updateData: UpdateData = gambar ? { name, gambar: `/${gambar.filepath.split('public')[1].replace(/\\/g, '/').replace(/^\/+/, '')}` } : { name };
+          if (gambar) {
+            const relativePath = gambar.filepath.split('public')[1].replace(/\\/g, '/').replace(/^\/+/, '');
             const urlPath = `/${relativePath}`;
-            updateData.photoUrl = urlPath;
+            updateData.gambar = urlPath;
 
             // Delete old image
-            if (Weddingphoto.photoUrl) {
-              const oldPath = `./public${Weddingphoto.photoUrl}`;
+            if (Weddingphoto.gambar) {
+              const oldPath = `./public${Weddingphoto.gambar}`;
               fs.unlink(oldPath, (err) => {
                 if (err) console.error('Error deleting old file:', err);
               });
@@ -111,8 +114,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // Delete the image file
-        if (Weddingphoto.photoUrl) {
-          const filePath = `./public${Weddingphoto.photoUrl}`;
+        if (Weddingphoto.gambar) {
+          const filePath = `./public${Weddingphoto.gambar}`;
           fs.unlink(filePath, (err) => {
             if (err) console.error('Error deleting file:', err);
           });

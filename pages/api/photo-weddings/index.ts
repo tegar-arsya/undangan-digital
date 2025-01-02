@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import formidable, { File } from 'formidable';
+import formidable from 'formidable';
 import fs from 'fs';
 import prisma from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
@@ -50,9 +50,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           : fields.weddingId;
 
         const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
-        const photoUrls = Array.isArray(files.photoUrl) ? files.photoUrl : [files.photoUrl];
+        const gambars = Array.isArray(files.gambar) ? files.gambar : [files.gambar];
 
-        if (!weddingId || !name || photoUrls.length === 0) {
+        if (!weddingId || !name || gambars.length === 0) {
           return res.status(400).json({ message: 'Invalid input' });
         }
 
@@ -69,7 +69,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
 
           const newPhotoWeddings = await Promise.all(
-            photoUrls.map(async (photoFile: File) => {
+            gambars.map( (photoFile) => {
+              if (!photoFile) {
+                throw new Error('photoFile is undefined');
+              }
               const relativePath = photoFile?.filepath?.split('public')?.[1]?.replace(/\\/g, '/').replace(/^\/+/, '');
               const urlPath = `/${relativePath}`;
 
@@ -77,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 data: {
                   weddingId,
                   name: name ?? '', 
-                  photoUrl: urlPath,
+                  gambar: urlPath,
                 },
               });
             })
@@ -94,16 +97,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!weddingId || typeof weddingId !== 'string') {
         return res.status(400).json({ message: 'Invalid weddingId' });
       }
-      const photoUrls = await prisma.weddingPhoto.findMany({
+      const gambars = await prisma.weddingPhoto.findMany({
         where: { weddingId }, // Filter berdasarkan weddingId
       select: {
         id: true,
-        photoUrl: true,
+        gambar: true,
       },
       orderBy: { createdAt: 'desc' },
     });
 
-      res.status(200).json(photoUrls);
+      res.status(200).json(gambars);
     } else {
       res.status(405).json({ message: 'Method not allowed' });
     }

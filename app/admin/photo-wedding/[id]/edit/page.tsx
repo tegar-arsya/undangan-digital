@@ -138,6 +138,7 @@ export default function EditPhotoWeddings({ params }: { params: { id: string } }
                   <Label htmlFor="gambar">Gambar</Label>
                   <Input
                     id="gambar"
+                    multiple
                     name="gambar"
                     type="file"
                     accept="image/*"
@@ -148,7 +149,7 @@ export default function EditPhotoWeddings({ params }: { params: { id: string } }
                   <Label>Current Image</Label>
                   <div className="relative w-full h-48">
                     <Image 
-                      src={photowedding.photoUrl} 
+                      src={photowedding.gambar} 
                       alt="Current background" 
                       layout="fill"
                       objectFit="contain"

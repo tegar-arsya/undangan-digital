@@ -121,10 +121,10 @@ export default function GuestWeddings() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="photoUrl">photoUrl</Label>
+                  <Label htmlFor="gambar">gambar</Label>
                   <Input
-                    id="photoUrl"
-                    name="photoUrl"
+                    id="gambar"
+                    name="gambar"
                     type="file"
                     accept="image/*"
                     multiple

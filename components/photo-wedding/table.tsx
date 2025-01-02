@@ -9,7 +9,7 @@ interface Photowedding {
   id: string;
   weddingId: string;
   name: string;
-  photoUrl: string;
+  gambar: string;
 }
 
 interface PhotoweddingsTableProps {
@@ -52,7 +52,7 @@ export function PhotoweddingsTable({ Photoweddings }: PhotoweddingsTableProps) {
                 <TableCell>
                   <div className="flex flex-col">
                     <span className="font-medium text-gray-800">
-                      {Photoweddings.photoUrl}
+                      {Photoweddings.gambar}
                     </span>
                   </div>
                 </TableCell>
