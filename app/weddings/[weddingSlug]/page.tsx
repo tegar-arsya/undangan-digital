@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import InvitationDetails from '@/components/InvitationDetails'
+import { WeddingHeader } from '@/components/weddings/clientHeader';
 import PhotoGallery from '@/components/PhotoGallery'
 import CountdownTimer from '@/components/CountdownTimer'
 import { RSVPSummaryTable } from '@/components/rsvp/RSVPSummaryTable'
@@ -30,14 +31,21 @@ export default async function WeddingPage({ params }: { params: { weddingSlug: s
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      <h1 className="text-4xl font-bold text-center mb-8">
-        {weddingData.brideName} & {weddingData.groomName}
-      </h1>
-      <InvitationDetails weddingData={weddingData} />
-      <CountdownTimer weddingDate={weddingData.date} />
-      <PhotoGallery weddingId={weddingData.id} />
-      <RSVPSummaryTable rsvps={weddingData.rsvps} />
+    <div className="min-h-screen bg-gradient-to-b from-white to-rose-50">
+      <WeddingHeader
+        brideName={weddingData.brideName}
+        groomName={weddingData.groomName}
+        weddingId={weddingData.id}
+      />
+      <div className="container mx-auto px-4 py-12 space-y-12 -mt-12 relative z-20">
+        <div className="grid gap-8 max-w-4xl mx-auto">
+          <InvitationDetails weddingData={weddingData} />
+          <CountdownTimer weddingDate={weddingData.date} />
+          <PhotoGallery weddingId={weddingData.id} />
+          <RSVPSummaryTable rsvps={weddingData.rsvps} />
+        </div>
+      </div>
+
 
     </div>
   );

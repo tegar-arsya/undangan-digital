@@ -1,12 +1,14 @@
-import { notFound } from 'next/navigation'
-import prisma from '@/lib/prisma'
-import InvitationDetails from '@/components/InvitationDetails'
-import CountdownTimer from '@/components/CountdownTimer'
-import RSVPForm from '@/components/RSVPForm'
-import { RSVPSummaryTable } from '@/components/rsvp/RSVPSummaryTable'
-import PhotoGallery from '@/components/PhotoGallery'
+import { notFound } from 'next/navigation';
+import prisma from '@/lib/prisma';
+import { WeddingHeader } from '@/components/weddings/WeddingHeader';
+import InvitationDetails from '@/components/InvitationDetails';
+import CountdownTimer from '@/components/CountdownTimer';
+import RSVPForm from '@/components/RSVPForm';
+import { RSVPSummaryTable } from '@/components/rsvp/RSVPSummaryTable';
+import PhotoGallery from '@/components/PhotoGallery';
+
 export default async function GuestPage({ params }: { params: { weddingSlug: string, guestSlug: string } }) {
-  const { weddingSlug, guestSlug } = params
+  const { weddingSlug, guestSlug } = params;
 
   // Fetch wedding data with RSVPs
   const weddingData = await prisma.wedding.findUnique({
@@ -18,10 +20,10 @@ export default async function GuestPage({ params }: { params: { weddingSlug: str
         }
       }
     }
-  })
+  });
 
   if (!weddingData) {
-    notFound()
+    notFound();
   }
 
   // Fetch guest data associated with the wedding
@@ -33,29 +35,27 @@ export default async function GuestPage({ params }: { params: { weddingSlug: str
     include: {
       rsvp: true,
     },
-  })
+  });
 
   if (!guestData) {
-    notFound()
+    notFound();
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-rose-50">
-      <div className="container mx-auto px-4 py-8 space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-gray-800">
-            {weddingData.brideName} & {weddingData.groomName}
-          </h1>
-          <p className="text-2xl text-gray-600 font-light">
-            Dear <span className="font-medium text-rose-600">{guestData.name}</span>,
-            <br />you are cordially invited to our wedding celebration!
-          </p>
-        </div>
+      <WeddingHeader 
+        brideName={weddingData.brideName}
+        groomName={weddingData.groomName}
+        guestName={guestData.name}
+        weddingId={weddingData.id}
+      />
 
+      <div className="container mx-auto px-4 py-12 space-y-12 -mt-12 relative z-20">
         <div className="grid gap-8 max-w-4xl mx-auto">
           <InvitationDetails weddingData={weddingData} />
           <CountdownTimer weddingDate={weddingData.date} />
           <PhotoGallery weddingId={weddingData.id} />
+          
           {!guestData.rsvp && (
             <RSVPForm 
               weddingId={weddingData.id} 
@@ -64,9 +64,9 @@ export default async function GuestPage({ params }: { params: { weddingSlug: str
           )}
 
           {guestData.rsvp && (
-            <div className="text-center p-4 bg-emerald-50 rounded-lg border border-emerald-200">
-              <p className="text-emerald-800">
-                Thank you for your RSVP! Your response has been recorded.
+            <div className="text-center p-6 bg-emerald-50 rounded-lg border border-emerald-200">
+              <p className="text-emerald-800 text-lg">
+                Terima kasih atas konfirmasi kehadiran Anda!
               </p>
             </div>
           )}
@@ -75,5 +75,5 @@ export default async function GuestPage({ params }: { params: { weddingSlug: str
         </div>
       </div>
     </div>
-  )
+  );
 }

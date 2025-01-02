@@ -6,19 +6,18 @@ import { Background } from '@/types/background';
 interface WeddingHeaderProps {
   brideName: string;
   groomName: string;
-  guestName: string;
   weddingId: string;
 }
 
-export function WeddingHeader({ brideName, groomName, guestName, weddingId }: WeddingHeaderProps) {
-  const [background, setBackground] = useState<Background[]>([]);
+export function WeddingHeader({ brideName, groomName, weddingId }: WeddingHeaderProps) {
+    const [background, setBackground] = useState<Background[]>([]);
 
   useEffect(() => {
     async function fetchBackground() {
       try {
         const response = await fetch(`/api/background?weddingId=${weddingId}`);
         if (response.ok) {
-          const data: Background[] = await response.json();
+          const data: Background[]  = await response.json();
           setBackground(data);
         }
       } catch (error) {
@@ -38,6 +37,7 @@ export function WeddingHeader({ brideName, groomName, guestName, weddingId }: We
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}
+      
     >
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-black/40" />
@@ -57,9 +57,6 @@ export function WeddingHeader({ brideName, groomName, guestName, weddingId }: We
           <p className="text-xl text-amber-100 font-light">
             Dear
           </p>
-          <p className="text-3xl font-medium text-white">
-            {guestName}
-          </p>
           <p className="text-xl text-amber-100 font-light mt-4">
             You are cordially invited to our wedding celebration
           </p>
@@ -75,5 +72,6 @@ export function WeddingHeader({ brideName, groomName, guestName, weddingId }: We
       <div className="absolute bottom-8 left-8 w-24 h-24 border-l-2 border-b-2 border-amber-200/60" />
       <div className="absolute bottom-8 right-8 w-24 h-24 border-r-2 border-b-2 border-amber-200/60" />
     </div>
+    
   );
 }

@@ -92,21 +92,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       });
     } else if (req.method === 'GET') {
-      const backgrounds = await prisma.background.findMany({
-        where: {
-          wedding: {
-            userId,
-          },
+      const { weddingId } = req.query;
+      if (!weddingId || typeof weddingId !== 'string') {
+        return res.status(400).json({ message: 'Invalid weddingId' });
+      }
+      const backgrounds = await prisma.background.findUnique({
+        where: { weddingId },
+        select: {
+          id: true,
+          gambar: true,
         },
-        include: {
-          wedding: {
-            select: {
-              brideName: true,
-              groomName: true,
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
       });
 
       res.status(200).json(backgrounds);
