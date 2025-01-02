@@ -40,13 +40,13 @@ export default function RSVPForm({ weddingId, guestSlug }: RSVPFormProps) {
           <HeartIcon className="w-6 h-6 text-rose-500" />
         </div>
         <CardTitle className="text-2xl font-bold text-gray-800">RSVP</CardTitle>
-        <p className="text-sm text-gray-600">Please let us know if you can attend</p>
+        <p className="text-sm text-gray-600">Harap beri tahu kami jika Anda dapat hadir</p>
       </CardHeader>
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <label className="text-sm font-medium text-gray-700 block">
-              Will you attend?
+            Apakah Anda akan hadir?
             </label>
             <RadioGroup
               value={attendance}
@@ -63,7 +63,7 @@ export default function RSVPForm({ weddingId, guestSlug }: RSVPFormProps) {
                   htmlFor="yes"
                   className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-200 p-4 hover:border-rose-400 peer-checked:border-rose-500 peer-checked:bg-rose-50 cursor-pointer transition-all"
                 >
-                  <span className="text-sm font-medium">Yes, I'll be there</span>
+                  <span className="text-sm font-medium">Ya, saya akan berada di sana</span>
                 </label>
               </div>
               <div className="relative">
@@ -76,7 +76,7 @@ export default function RSVPForm({ weddingId, guestSlug }: RSVPFormProps) {
                   htmlFor="no"
                   className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-200 p-4 hover:border-gray-400 peer-checked:border-gray-500 peer-checked:bg-gray-50 cursor-pointer transition-all"
                 >
-                  <span className="text-sm font-medium">Sorry, I can't make it</span>
+                  <span className="text-sm font-medium">Maaf, saya tidak bisa hadir</span>
                 </label>
               </div>
             </RadioGroup>
@@ -84,7 +84,7 @@ export default function RSVPForm({ weddingId, guestSlug }: RSVPFormProps) {
 
           <div className="space-y-2">
             <label htmlFor="komentar" className="text-sm font-medium text-gray-700 block">
-              Leave a Message (Optional)
+            Tinggalkan Pesan (Opsional)
             </label>
             <Textarea
               id="komentar"
