@@ -36,8 +36,9 @@ export default async function WeddingPage({ params }: { params: { weddingSlug: s
       </h1>
       <InvitationDetails weddingData={weddingData} />
       <CountdownTimer weddingDate={weddingData.date} />
-      <RSVPSummaryTable rsvps={weddingData.rsvps} />
       <PhotoGallery weddingId={weddingData.id} />
+      <RSVPSummaryTable rsvps={weddingData.rsvps} />
+
     </div>
   );
 }

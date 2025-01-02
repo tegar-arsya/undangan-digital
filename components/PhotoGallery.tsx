@@ -4,11 +4,9 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Camera } from 'lucide-react';
+import { WeddingPhoto } from '@/types/weddingphoto';
 
-interface WeddingPhoto {
-  id: string;
-  photoUrl: string;
-}
+
 
 export default function PhotoGallery({ weddingId }: { weddingId: string }) {
   const [photos, setPhotos] = useState<WeddingPhoto[]>([]);
@@ -57,7 +55,7 @@ export default function PhotoGallery({ weddingId }: { weddingId: string }) {
               className="group relative aspect-square overflow-hidden rounded-lg border-4 border-amber-100 shadow-md transition-transform hover:scale-[1.02]"
             >
               <Image
-                src={photo.photoUrl}
+                src={photo.gambar}
                 width={400}
                 height={400}
                 alt="Wedding photo"
