@@ -26,13 +26,13 @@ export function useRSVP() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to submit RSVP');
+        throw new Error(error.error || 'Gagal mengirimkan RSVP');
       }
 
       await Swal.fire({
         icon: 'success',
-        title: 'Thank You!',
-        text: 'Your RSVP has been submitted successfully.',
+        title: 'Terima Kasih!',
+        text: 'RSVP Anda telah berhasil dikirimkan.',
         confirmButtonColor: '#10B981',
         background: '#FFF',
         customClass: {
@@ -47,7 +47,7 @@ export function useRSVP() {
       await Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: error instanceof Error ? error.message : 'Failed to submit RSVP',
+        text: error instanceof Error ? error.message : 'Gagal mengirimkan RSVP',
         confirmButtonColor: '#EF4444',
         background: '#FFF',
         customClass: {
